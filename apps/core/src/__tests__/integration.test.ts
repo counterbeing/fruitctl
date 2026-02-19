@@ -151,5 +151,12 @@ describe("integration: server + adapter", () => {
 		// Verify the execute function was called with the correct params
 		expect(executeFn).toHaveBeenCalledOnce();
 		expect(executeFn).toHaveBeenCalledWith({ title: "Buy milk" });
+
+		// Verify audit log entry was created
+		const { auditLog } = await import("@fruitctl/db");
+		const { eq } = await import("drizzle-orm");
+		const logs = db.select().from(auditLog).where(eq(auditLog.proposalId, proposal.id)).all();
+		expect(logs).toHaveLength(1);
+		expect(logs[0].result).toContain("ok");
 	});
 });
