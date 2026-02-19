@@ -27,6 +27,9 @@ importers:
         specifier: ^14
         version: 14.0.3
     devDependencies:
+      '@types/node':
+        specifier: ^25.3.0
+        version: 25.3.0
       tsx:
         specifier: ^4.21
         version: 4.21.0
@@ -45,9 +48,6 @@ importers:
       '@fruitctl/db':
         specifier: workspace:*
         version: link:../../packages/db
-      '@fruitctl/reminders':
-        specifier: workspace:*
-        version: link:../../packages/plugins/reminders
       fastify:
         specifier: ^5.7
         version: 5.7.4
