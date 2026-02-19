@@ -5,6 +5,7 @@ import type {
 	ApprovalEngineInterface,
 	CapabilityDef,
 } from "@fruitctl/shared";
+import type { ActionRegistry } from "./approval.js";
 
 export interface RegistrationResult {
 	registered: string[];
@@ -15,7 +16,9 @@ export interface RegistrationResult {
 interface RegistrationOptions {
 	db: AppDatabase;
 	config: Record<string, unknown>;
-	approval: ApprovalEngineInterface;
+	approval: ApprovalEngineInterface & {
+		setRegistry?: (registry: ActionRegistry) => void;
+	};
 }
 
 export async function registerAdapters(
@@ -48,6 +51,36 @@ export async function registerAdapters(
 
 		registered.push(manifest.name);
 		capabilities.push(...manifest.capabilities);
+	}
+
+	const actionMap = new Map<
+		string,
+		Map<string, { execute: (params: unknown) => Promise<unknown> }>
+	>();
+
+	for (const adapter of adapters) {
+		const { manifest } = adapter;
+		if (!registered.includes(manifest.name)) continue;
+		if (manifest.actions) {
+			const adapterActions = new Map<
+				string,
+				{ execute: (params: unknown) => Promise<unknown> }
+			>();
+			for (const [name, def] of Object.entries(manifest.actions)) {
+				adapterActions.set(name, { execute: def.execute });
+			}
+			actionMap.set(manifest.name, adapterActions);
+		}
+	}
+
+	const registry: ActionRegistry = {
+		getAction(adapter, action) {
+			return actionMap.get(adapter)?.get(action);
+		},
+	};
+
+	if (typeof options.approval.setRegistry === "function") {
+		options.approval.setRegistry(registry);
 	}
 
 	return { registered, skipped, capabilities };

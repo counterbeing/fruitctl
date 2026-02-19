@@ -1,7 +1,9 @@
 import { createDatabase } from "@fruitctl/db";
 import { remindersAdapter } from "@fruitctl/reminders";
 import type { AdapterPlugin } from "@fruitctl/shared";
+import { ApprovalEngine } from "./approval.js";
 import { loadConfig } from "./config.js";
+import { registerProposalRoutes } from "./proposals-routes.js";
 import { registerAdapters } from "./registry.js";
 import { createServer } from "./server.js";
 
@@ -18,18 +20,17 @@ async function main() {
 		logger: true,
 	});
 
+	const engine = new ApprovalEngine(db);
+	registerProposalRoutes(server, engine);
+
 	const enabledAdapters = config.adapters
 		.map((name) => adapterMap[name])
 		.filter(Boolean);
 
-	const noopApproval = {
-		propose: async () => ({ id: "noop", status: "auto-approved" }),
-	};
-
 	const result = await registerAdapters(server, enabledAdapters, {
 		db,
 		config: {},
-		approval: noopApproval,
+		approval: engine,
 	});
 
 	console.log(`Registered adapters: ${result.registered.join(", ")}`);
