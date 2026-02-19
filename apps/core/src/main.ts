@@ -2,12 +2,18 @@ import { createDatabase } from "@fruitctl/db";
 import { createServer } from "./server.js";
 import { registerAdapters } from "./registry.js";
 import { loadConfig } from "./config.js";
-import { remindersAdapter } from "@fruitctl/reminders";
 import type { AdapterPlugin } from "./adapter.js";
 
-const ADAPTER_MAP: Record<string, AdapterPlugin> = {
-	reminders: remindersAdapter,
-};
+async function loadAdapterMap(): Promise<Record<string, AdapterPlugin>> {
+	const map: Record<string, AdapterPlugin> = {};
+	try {
+		const { remindersAdapter } = await import("@fruitctl/reminders");
+		map.reminders = remindersAdapter;
+	} catch {
+		// reminders package not available
+	}
+	return map;
+}
 
 async function main() {
 	const config = loadConfig();
@@ -18,8 +24,9 @@ async function main() {
 		logger: true,
 	});
 
+	const adapterMap = await loadAdapterMap();
 	const enabledAdapters = config.adapters
-		.map((name) => ADAPTER_MAP[name])
+		.map((name) => adapterMap[name])
 		.filter(Boolean);
 
 	const result = await registerAdapters(server, enabledAdapters, {
