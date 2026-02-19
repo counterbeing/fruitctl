@@ -45,6 +45,9 @@ importers:
       '@fruitctl/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@fruitctl/reminders':
+        specifier: workspace:*
+        version: link:../../packages/plugins/reminders
       fastify:
         specifier: ^5.7
         version: 5.7.4
