@@ -3,6 +3,22 @@ import { promisify } from "node:util";
 
 type ExecFn = (cmd: string) => Promise<{ stdout: string }>;
 
+interface AddOptions {
+	title: string;
+	list?: string;
+	due?: string;
+	notes?: string;
+	priority?: "none" | "low" | "medium" | "high";
+}
+
+interface EditOptions {
+	title?: string;
+	list?: string;
+	due?: string;
+	notes?: string;
+	priority?: "none" | "low" | "medium" | "high";
+}
+
 const defaultExec: ExecFn = promisify(exec);
 
 export class Remindctl {
@@ -37,5 +53,37 @@ export class Remindctl {
 		const found = all.find((r: any) => r.id === id);
 		if (!found) return null;
 		return found;
+	}
+
+	async add(opts: AddOptions): Promise<unknown> {
+		const parts = ["remindctl add"];
+		parts.push(`--title "${opts.title}"`);
+		if (opts.list) parts.push(`--list "${opts.list}"`);
+		if (opts.due) parts.push(`--due "${opts.due}"`);
+		if (opts.notes) parts.push(`--notes "${opts.notes}"`);
+		if (opts.priority) parts.push(`--priority ${opts.priority}`);
+		parts.push("--json --no-input");
+		const { stdout } = await this.exec(parts.join(" "));
+		return JSON.parse(stdout);
+	}
+
+	async complete(id: string): Promise<void> {
+		await this.exec(`remindctl complete ${id} --json --no-input`);
+	}
+
+	async delete(id: string): Promise<void> {
+		await this.exec(`remindctl delete ${id} --force --json --no-input`);
+	}
+
+	async edit(id: string, opts: EditOptions): Promise<unknown> {
+		const parts = [`remindctl edit ${id}`];
+		if (opts.title) parts.push(`--title "${opts.title}"`);
+		if (opts.list) parts.push(`--list "${opts.list}"`);
+		if (opts.due) parts.push(`--due "${opts.due}"`);
+		if (opts.notes) parts.push(`--notes "${opts.notes}"`);
+		if (opts.priority) parts.push(`--priority ${opts.priority}`);
+		parts.push("--json --no-input");
+		const { stdout } = await this.exec(parts.join(" "));
+		return JSON.parse(stdout);
 	}
 }

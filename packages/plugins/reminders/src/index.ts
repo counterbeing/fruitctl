@@ -1,7 +1,15 @@
-import type { AdapterPlugin } from "@fruitctl/shared";
+import type { ActionDef, AdapterPlugin } from "@fruitctl/shared";
+import type { z } from "zod/v4";
 import { remindersPlugin } from "./plugin.js";
 import { Remindctl } from "./remindctl.js";
-import { getReminderSchema, listRemindersSchema } from "./schemas.js";
+import {
+	addReminderSchema,
+	completeReminderSchema,
+	deleteReminderSchema,
+	editReminderSchema,
+	getReminderSchema,
+	listRemindersSchema,
+} from "./schemas.js";
 
 const ctl = new Remindctl();
 
@@ -35,5 +43,47 @@ export const remindersAdapter: AdapterPlugin = Object.assign(remindersPlugin, {
 				paramsSchema: getReminderSchema,
 			},
 		],
+		actions: {
+			add: {
+				name: "add",
+				description: "Add a new reminder",
+				paramsSchema: addReminderSchema,
+				validate: async (params) => addReminderSchema.parse(params),
+				execute: async (params) => {
+					const p = params as z.infer<typeof addReminderSchema>;
+					return ctl.add(p);
+				},
+			},
+			edit: {
+				name: "edit",
+				description: "Edit an existing reminder",
+				paramsSchema: editReminderSchema,
+				validate: async (params) => editReminderSchema.parse(params),
+				execute: async (params) => {
+					const p = params as z.infer<typeof editReminderSchema>;
+					return ctl.edit(p.id, p);
+				},
+			},
+			complete: {
+				name: "complete",
+				description: "Mark a reminder as complete",
+				paramsSchema: completeReminderSchema,
+				validate: async (params) => completeReminderSchema.parse(params),
+				execute: async (params) => {
+					const p = params as z.infer<typeof completeReminderSchema>;
+					await ctl.complete(p.id);
+				},
+			},
+			delete: {
+				name: "delete",
+				description: "Delete a reminder",
+				paramsSchema: deleteReminderSchema,
+				validate: async (params) => deleteReminderSchema.parse(params),
+				execute: async (params) => {
+					const p = params as z.infer<typeof deleteReminderSchema>;
+					await ctl.delete(p.id);
+				},
+			},
+		} satisfies Record<string, ActionDef>,
 	},
 });

@@ -104,4 +104,35 @@ describe("reminders plugin", () => {
 		});
 		expect(res.statusCode).toBe(404);
 	});
+
+	it("POST /add creates a proposal", async () => {
+		const server = buildServer();
+		const res = await server.inject({
+			method: "POST",
+			url: "/add",
+			payload: { title: "Milk", list: "Shopping" },
+		});
+		expect(res.statusCode).toBe(200);
+		expect(res.json().status).toBe("approved");
+	});
+
+	it("POST /add rejects invalid payload", async () => {
+		const server = buildServer();
+		const res = await server.inject({
+			method: "POST",
+			url: "/add",
+			payload: { title: "" },
+		});
+		expect(res.statusCode).toBe(400);
+	});
+
+	it("POST /complete creates a proposal", async () => {
+		const server = buildServer();
+		const res = await server.inject({
+			method: "POST",
+			url: "/complete",
+			payload: { id: "r-1" },
+		});
+		expect(res.statusCode).toBe(200);
+	});
 });

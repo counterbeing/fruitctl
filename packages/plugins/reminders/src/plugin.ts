@@ -2,7 +2,14 @@ import type { AdapterPluginOptions } from "@fruitctl/shared";
 import { AppError, ErrorCode } from "@fruitctl/shared";
 import type { FastifyPluginAsync } from "fastify";
 import { Remindctl } from "./remindctl.js";
-import { getReminderSchema, listRemindersSchema } from "./schemas.js";
+import {
+	addReminderSchema,
+	completeReminderSchema,
+	deleteReminderSchema,
+	editReminderSchema,
+	getReminderSchema,
+	listRemindersSchema,
+} from "./schemas.js";
 
 interface RemindersPluginOptions extends AdapterPluginOptions {
 	_mockExec?: any;
@@ -40,5 +47,53 @@ export const remindersPlugin: FastifyPluginAsync<
 			);
 		}
 		return { item: reminder };
+	});
+
+	fastify.post("/add", async (request) => {
+		const parsed = addReminderSchema.safeParse(request.body);
+		if (!parsed.success) {
+			throw new AppError(ErrorCode.VALIDATION_ERROR, parsed.error.message);
+		}
+		return opts.approval.propose({
+			adapter: "reminders",
+			action: "add",
+			params: parsed.data,
+		});
+	});
+
+	fastify.post("/edit", async (request) => {
+		const parsed = editReminderSchema.safeParse(request.body);
+		if (!parsed.success) {
+			throw new AppError(ErrorCode.VALIDATION_ERROR, parsed.error.message);
+		}
+		return opts.approval.propose({
+			adapter: "reminders",
+			action: "edit",
+			params: parsed.data,
+		});
+	});
+
+	fastify.post("/complete", async (request) => {
+		const parsed = completeReminderSchema.safeParse(request.body);
+		if (!parsed.success) {
+			throw new AppError(ErrorCode.VALIDATION_ERROR, parsed.error.message);
+		}
+		return opts.approval.propose({
+			adapter: "reminders",
+			action: "complete",
+			params: parsed.data,
+		});
+	});
+
+	fastify.post("/delete", async (request) => {
+		const parsed = deleteReminderSchema.safeParse(request.body);
+		if (!parsed.success) {
+			throw new AppError(ErrorCode.VALIDATION_ERROR, parsed.error.message);
+		}
+		return opts.approval.propose({
+			adapter: "reminders",
+			action: "delete",
+			params: parsed.data,
+		});
 	});
 };
