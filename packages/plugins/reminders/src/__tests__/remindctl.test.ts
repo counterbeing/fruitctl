@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { Remindctl } from "../remindctl.js";
 
 describe("Remindctl", () => {
@@ -20,9 +20,7 @@ describe("Remindctl", () => {
 
 	it("parses reminders for a specific list", async () => {
 		const mockExec = vi.fn().mockResolvedValue({
-			stdout: JSON.stringify([
-				{ id: "r-1", title: "Milk", completed: false },
-			]),
+			stdout: JSON.stringify([{ id: "r-1", title: "Milk", completed: false }]),
 		});
 		const ctl = new Remindctl(mockExec);
 		const reminders = await ctl.listReminders("Groceries");

@@ -1,2 +1,2 @@
-export { createDatabase, type AppDatabase } from "./connection.js";
+export { type AppDatabase, createDatabase } from "./connection.js";
 export * from "./schema.js";

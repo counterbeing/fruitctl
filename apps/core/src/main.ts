@@ -1,8 +1,8 @@
 import { createDatabase } from "@fruitctl/db";
-import { createServer } from "./server.js";
-import { registerAdapters } from "./registry.js";
-import { loadConfig } from "./config.js";
 import type { AdapterPlugin } from "./adapter.js";
+import { loadConfig } from "./config.js";
+import { registerAdapters } from "./registry.js";
+import { createServer } from "./server.js";
 
 async function loadAdapterMap(): Promise<Record<string, AdapterPlugin>> {
 	const map: Record<string, AdapterPlugin> = {};

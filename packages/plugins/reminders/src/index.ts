@@ -1,7 +1,7 @@
 import type { AdapterPlugin } from "@fruitctl/core";
 import { remindersPlugin } from "./plugin.js";
-import { listRemindersSchema, getReminderSchema } from "./schemas.js";
 import { Remindctl } from "./remindctl.js";
+import { getReminderSchema, listRemindersSchema } from "./schemas.js";
 
 const ctl = new Remindctl();
 

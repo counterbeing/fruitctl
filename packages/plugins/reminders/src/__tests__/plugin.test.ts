@@ -1,8 +1,8 @@
-import { describe, it, expect, vi } from "vitest";
-import Fastify from "fastify";
-import { remindersPlugin } from "../plugin.js";
 import { AppError } from "@fruitctl/core";
 import { createDatabase } from "@fruitctl/db";
+import Fastify from "fastify";
+import { describe, expect, it, vi } from "vitest";
+import { remindersPlugin } from "../plugin.js";
 
 const mockReminders = [
 	{ id: "r-1", title: "Milk", completed: false },
@@ -20,7 +20,7 @@ describe("reminders plugin", () => {
 		const db = createDatabase(":memory:");
 
 		// Add error handler so AppError produces correct status codes
-		server.setErrorHandler(async (error, request, reply) => {
+		server.setErrorHandler(async (error, _request, reply) => {
 			if (error instanceof AppError) {
 				return reply.status(error.statusCode).send(error.toJSON());
 			}
