@@ -40,7 +40,11 @@ describe("integration: server + adapter", () => {
 		const server = createServer({ db, jwtSecret: "test-secret-long-enough" });
 		const adapter = createTestRemindersAdapter();
 
-		await registerAdapters(server, [adapter], { db, config: {} });
+		await registerAdapters(server, [adapter], {
+			db,
+			config: {},
+			approval: { propose: async () => ({ id: "mock", status: "approved" }) },
+		});
 
 		// Health check works
 		const health = await server.inject({ method: "GET", url: "/health" });

@@ -37,6 +37,9 @@ describe("reminders plugin", () => {
 		server.register(remindersPlugin, {
 			db,
 			config: {},
+			approval: {
+				propose: vi.fn().mockResolvedValue({ id: "mock", status: "approved" }),
+			},
 			_mockExec: vi.fn().mockImplementation(async (cmd: string) => {
 				if (cmd === "remindctl list --json") {
 					return { stdout: JSON.stringify(mockLists) };

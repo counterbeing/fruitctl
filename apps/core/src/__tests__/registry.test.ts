@@ -37,6 +37,7 @@ describe("registerAdapters", () => {
 		const result = await registerAdapters(server, [adapter], {
 			db,
 			config: {},
+			approval: { propose: async () => ({ id: "mock", status: "approved" }) },
 		});
 
 		expect(result.registered).toContain("reminders");
@@ -53,6 +54,7 @@ describe("registerAdapters", () => {
 		const result = await registerAdapters(server, [adapter], {
 			db,
 			config: {},
+			approval: { propose: async () => ({ id: "mock", status: "approved" }) },
 		});
 
 		expect(result.registered).not.toContain("broken");
@@ -68,6 +70,7 @@ describe("registerAdapters", () => {
 		const result = await registerAdapters(server, [a1, a2], {
 			db,
 			config: {},
+			approval: { propose: async () => ({ id: "mock", status: "approved" }) },
 		});
 
 		expect(result.capabilities).toHaveLength(2);

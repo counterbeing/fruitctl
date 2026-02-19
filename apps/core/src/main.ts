@@ -22,9 +22,14 @@ async function main() {
 		.map((name) => adapterMap[name])
 		.filter(Boolean);
 
+	const noopApproval = {
+		propose: async () => ({ id: "noop", status: "auto-approved" }),
+	};
+
 	const result = await registerAdapters(server, enabledAdapters, {
 		db,
 		config: {},
+		approval: noopApproval,
 	});
 
 	console.log(`Registered adapters: ${result.registered.join(", ")}`);

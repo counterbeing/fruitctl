@@ -1,6 +1,10 @@
 import type { AppDatabase } from "@fruitctl/db";
 import type { FastifyInstance } from "fastify";
-import type { AdapterPlugin, CapabilityDef } from "@fruitctl/shared";
+import type {
+	AdapterPlugin,
+	ApprovalEngineInterface,
+	CapabilityDef,
+} from "@fruitctl/shared";
 
 export interface RegistrationResult {
 	registered: string[];
@@ -11,6 +15,7 @@ export interface RegistrationResult {
 interface RegistrationOptions {
 	db: AppDatabase;
 	config: Record<string, unknown>;
+	approval: ApprovalEngineInterface;
 }
 
 export async function registerAdapters(
@@ -38,6 +43,7 @@ export async function registerAdapters(
 			prefix: `/${manifest.name}`,
 			db: options.db,
 			config: options.config,
+			approval: options.approval,
 		});
 
 		registered.push(manifest.name);
