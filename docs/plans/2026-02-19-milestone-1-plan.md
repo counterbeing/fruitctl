@@ -6,7 +6,7 @@
 
 **Architecture:** pnpm + Nx monorepo with apps/core (Fastify server), apps/cli (fruitctl binary), packages/db (Drizzle + SQLite), and packages/plugins/reminders (remindctl adapter). JWT auth, structured errors, JSON logging. Adapters are Fastify plugins that register their own routes.
 
-**Tech Stack:** TypeScript, Fastify, Zod, Drizzle ORM, better-sqlite3, Nx, pnpm, Biome, Vitest, Commander (CLI)
+**Tech Stack:** TypeScript 5.9, Fastify 5.7, Zod 4, Drizzle ORM 0.45, better-sqlite3 12, Nx 22, pnpm, Biome 2, Vitest 4, Commander 14
 
 **Native dependency:** `remindctl` — install via `brew install steipete/tap/remindctl`, then `remindctl authorize` for Reminders access.
 
@@ -48,9 +48,9 @@
     "lint:fix": "biome check --write ."
   },
   "devDependencies": {
-    "nx": "^21",
-    "typescript": "^5.7",
-    "@biomejs/biome": "^1.9"
+    "nx": "^22",
+    "typescript": "^5.9",
+    "@biomejs/biome": "^2"
   }
 }
 ```
@@ -110,8 +110,7 @@ packages:
 
 ```json
 {
-  "$schema": "https://biomejs.dev/schemas/1.9.0/schema.json",
-  "organizeImports": { "enabled": true },
+  "$schema": "https://biomejs.dev/schemas/2.4.3/schema.json",
   "formatter": {
     "enabled": true,
     "indentStyle": "tab"
@@ -120,6 +119,13 @@ packages:
     "enabled": true,
     "rules": {
       "recommended": true
+    }
+  },
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
     }
   }
 }
@@ -155,15 +161,15 @@ Each sub-package follows the same pattern. Example for `apps/core`:
     "dev": "tsx watch src/index.ts"
   },
   "dependencies": {
-    "fastify": "^5",
-    "@fastify/jwt": "^9",
-    "zod": "^3.24",
+    "fastify": "^5.7",
+    "@fastify/jwt": "^10",
+    "zod": "^4",
     "@fruitctl/db": "workspace:*"
   },
   "devDependencies": {
-    "typescript": "^5.7",
-    "vitest": "^3",
-    "tsx": "^4"
+    "typescript": "^5.9",
+    "vitest": "^4",
+    "tsx": "^4.21"
   }
 }
 ```
@@ -446,7 +452,7 @@ No test for this — it's pure type definitions. Validated implicitly when adapt
 ```ts
 // apps/core/src/adapter.ts
 import type { FastifyPluginAsync } from "fastify";
-import type { ZodSchema } from "zod";
+import type { ZodSchema } from "zod/v4";
 import type { AppDatabase } from "@fruitctl/db";
 
 export interface NativeDep {
@@ -948,7 +954,7 @@ Expected: PASS
 
 ```ts
 // packages/plugins/reminders/src/schemas.ts
-import { z } from "zod";
+import { z } from "zod/v4";
 
 export const listRemindersSchema = z.object({
   list: z.string().min(1).max(200),
@@ -1175,7 +1181,7 @@ git commit -m "feat(reminders): add read-only reminders adapter with remindctl w
 
 ```ts
 // apps/core/src/config.ts
-import { z } from "zod";
+import { z } from "zod/v4";
 
 export const serverConfigSchema = z.object({
   port: z.number().default(3456),
