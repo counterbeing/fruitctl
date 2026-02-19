@@ -1,0 +1,22 @@
+{
+	"name": "@fruitctl/db",
+	"version": "0.1.0",
+	"private": true,
+	"type": "module",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"scripts": {
+		"build": "tsc",
+		"test": "vitest run"
+	},
+	"dependencies": {
+		"drizzle-orm": "^0.45",
+		"better-sqlite3": "^12"
+	},
+	"devDependencies": {
+		"@types/better-sqlite3": "^7",
+		"drizzle-kit": "^0.31",
+		"typescript": "^5.9",
+		"vitest": "^4"
+	}
+}

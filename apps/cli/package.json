@@ -1,0 +1,24 @@
+{
+	"name": "@fruitctl/cli",
+	"version": "0.1.0",
+	"private": true,
+	"type": "module",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"bin": {
+		"fruitctl": "dist/index.js"
+	},
+	"scripts": {
+		"build": "tsc",
+		"test": "vitest run"
+	},
+	"dependencies": {
+		"commander": "^14",
+		"@fruitctl/db": "workspace:*"
+	},
+	"devDependencies": {
+		"typescript": "^5.9",
+		"vitest": "^4",
+		"tsx": "^4.21"
+	}
+}
