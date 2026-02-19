@@ -1,7 +1,7 @@
 import fastifyJwt from "@fastify/jwt";
 import type { AppDatabase } from "@fruitctl/db";
 import Fastify, { type FastifyReply, type FastifyRequest } from "fastify";
-import { AppError, ErrorCode } from "./errors.js";
+import { AppError, ErrorCode } from "@fruitctl/shared";
 
 declare module "fastify" {
 	interface FastifyInstance {

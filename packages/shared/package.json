@@ -1,5 +1,5 @@
 {
-	"name": "@fruitctl/core",
+	"name": "@fruitctl/shared",
 	"version": "0.1.0",
 	"private": true,
 	"type": "module",
@@ -7,20 +7,15 @@
 	"types": "dist/index.d.ts",
 	"scripts": {
 		"build": "tsc",
-		"test": "vitest run",
-		"dev": "tsx watch src/main.ts"
+		"test": "vitest run"
 	},
 	"dependencies": {
 		"fastify": "^5.7",
-		"@fastify/jwt": "^10",
 		"zod": "^4",
-		"@fruitctl/db": "workspace:*",
-		"@fruitctl/shared": "workspace:*",
-		"@fruitctl/reminders": "workspace:*"
+		"@fruitctl/db": "workspace:*"
 	},
 	"devDependencies": {
 		"typescript": "^5.9",
-		"vitest": "^4",
-		"tsx": "^4.21"
+		"vitest": "^4"
 	}
 }

@@ -1,5 +1,5 @@
-import type { AdapterPluginOptions } from "@fruitctl/core";
-import { AppError, ErrorCode } from "@fruitctl/core";
+import type { AdapterPluginOptions } from "@fruitctl/shared";
+import { AppError, ErrorCode } from "@fruitctl/shared";
 import type { FastifyPluginAsync } from "fastify";
 import { Remindctl } from "./remindctl.js";
 import { getReminderSchema, listRemindersSchema } from "./schemas.js";

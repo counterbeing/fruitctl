@@ -1,7 +1,7 @@
 import { createDatabase } from "@fruitctl/db";
 import type { FastifyPluginAsync } from "fastify";
 import { describe, expect, it } from "vitest";
-import type { AdapterPlugin, AdapterPluginOptions } from "../adapter.js";
+import type { AdapterPlugin, AdapterPluginOptions } from "@fruitctl/shared";
 import { registerAdapters } from "../registry.js";
 import { createServer } from "../server.js";
 

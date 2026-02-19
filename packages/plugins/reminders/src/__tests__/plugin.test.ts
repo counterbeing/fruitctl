@@ -1,4 +1,4 @@
-import { AppError } from "@fruitctl/core";
+import { AppError } from "@fruitctl/shared";
 import { createDatabase } from "@fruitctl/db";
 import Fastify from "fastify";
 import { describe, expect, it, vi } from "vitest";

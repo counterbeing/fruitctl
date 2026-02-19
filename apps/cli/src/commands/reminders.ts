@@ -21,7 +21,7 @@ remindersCommand
 			list: name,
 		})) as any;
 		for (const r of data.items) {
-			const check = r.completed ? "[x]" : "[ ]";
+			const check = r.isCompleted ? "[x]" : "[ ]";
 			console.log(`${check} ${r.title} (${r.id})`);
 		}
 	});

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { AppError, ErrorCode } from "../errors.js";
+import { AppError, ErrorCode } from "@fruitctl/shared";
 
 describe("AppError", () => {
 	it("creates a structured error with code and message", () => {

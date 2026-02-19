@@ -17,6 +17,7 @@
 		"paths": {
 			"@fruitctl/core": ["./apps/core/src"],
 			"@fruitctl/db": ["./packages/db/src"],
+			"@fruitctl/shared": ["./packages/shared/src"],
 			"@fruitctl/reminders": ["./packages/plugins/reminders/src"]
 		}
 	}

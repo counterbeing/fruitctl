@@ -1,6 +1,6 @@
 import { createDatabase } from "@fruitctl/db";
 import { describe, expect, it } from "vitest";
-import type { AdapterPlugin } from "../adapter.js";
+import type { AdapterPlugin } from "@fruitctl/shared";
 import { registerAdapters } from "../registry.js";
 import { createServer } from "../server.js";
 

@@ -48,7 +48,7 @@ describe("createServer", () => {
 	it("returns structured errors for AppError", async () => {
 		const db = createDatabase(":memory:");
 		const server = createServer({ db, jwtSecret: "test-secret" });
-		const { AppError, ErrorCode } = await import("../errors.js");
+		const { AppError, ErrorCode } = await import("@fruitctl/shared");
 		server.get("/fail", async () => {
 			throw new AppError(ErrorCode.NOT_FOUND, "Thing not found");
 		});

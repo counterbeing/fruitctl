@@ -1,6 +1,6 @@
 import type { AppDatabase } from "@fruitctl/db";
 import type { FastifyInstance } from "fastify";
-import type { AdapterPlugin, CapabilityDef } from "./adapter.js";
+import type { AdapterPlugin, CapabilityDef } from "@fruitctl/shared";
 
 export interface RegistrationResult {
 	registered: string[];

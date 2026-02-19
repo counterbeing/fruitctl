@@ -48,6 +48,12 @@ importers:
       '@fruitctl/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@fruitctl/reminders':
+        specifier: workspace:*
+        version: link:../../packages/plugins/reminders
+      '@fruitctl/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
       fastify:
         specifier: ^5.7
         version: 5.7.4
@@ -89,12 +95,31 @@ importers:
 
   packages/plugins/reminders:
     dependencies:
-      '@fruitctl/core':
-        specifier: workspace:*
-        version: link:../../../apps/core
       '@fruitctl/db':
         specifier: workspace:*
         version: link:../../db
+      '@fruitctl/shared':
+        specifier: workspace:*
+        version: link:../../shared
+      fastify:
+        specifier: ^5.7
+        version: 5.7.4
+      zod:
+        specifier: ^4
+        version: 4.3.6
+    devDependencies:
+      typescript:
+        specifier: ^5.9
+        version: 5.9.3
+      vitest:
+        specifier: ^4
+        version: 4.0.18(@types/node@25.3.0)(tsx@4.21.0)(yaml@2.8.2)
+
+  packages/shared:
+    dependencies:
+      '@fruitctl/db':
+        specifier: workspace:*
+        version: link:../db
       fastify:
         specifier: ^5.7
         version: 5.7.4

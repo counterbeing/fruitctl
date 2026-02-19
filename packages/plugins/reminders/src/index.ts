@@ -1,4 +1,4 @@
-import type { AdapterPlugin } from "@fruitctl/core";
+import type { AdapterPlugin } from "@fruitctl/shared";
 import { remindersPlugin } from "./plugin.js";
 import { Remindctl } from "./remindctl.js";
 import { getReminderSchema, listRemindersSchema } from "./schemas.js";
