@@ -80,7 +80,26 @@ export class ApprovalEngine {
 	}
 
 	async approve(id: string, resolvedBy: string): Promise<Proposal> {
-		return this.resolve(id, "approved", resolvedBy);
+		const resolved = await this.resolve(id, "approved", resolvedBy);
+
+		const actionDef = this.registry?.getAction(
+			resolved.adapter,
+			resolved.action,
+		);
+		if (actionDef) {
+			try {
+				const result = await actionDef.execute(resolved.params);
+				await this.logExecution(resolved, result);
+			} catch (err) {
+				await this.logExecution(
+					resolved,
+					undefined,
+					err instanceof Error ? err.message : String(err),
+				);
+			}
+		}
+
+		return resolved;
 	}
 
 	async reject(id: string, resolvedBy: string): Promise<Proposal> {
