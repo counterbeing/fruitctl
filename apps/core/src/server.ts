@@ -32,7 +32,7 @@ export function createServer(options: ServerOptions) {
 	const adminKey = deriveKey("admin", options.secret);
 	const agentKey = deriveKey("agent", options.secret);
 
-	server.decorateRequest("role", "");
+	server.decorateRequest("role", "" as unknown as Role);
 
 	server.decorate(
 		"authenticate",
