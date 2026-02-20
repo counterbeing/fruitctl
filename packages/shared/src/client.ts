@@ -1,23 +1,47 @@
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 
 const CONFIG_DIR = join(homedir(), ".config", "fruitctl");
 const CREDS_PATH = join(CONFIG_DIR, "credentials.json");
 
-interface Credentials {
+export interface ServerCredentials {
+  mode: "server";
+  secret: string;
+  adminKey: string;
+  agentKey: string;
+  serverUrl: string;
+}
+
+export interface ClientCredentials {
+  mode: "client";
   token: string;
   serverUrl: string;
 }
 
-export function saveCredentials(creds: Credentials): void {
-  mkdirSync(CONFIG_DIR, { recursive: true });
-  writeFileSync(CREDS_PATH, JSON.stringify(creds, null, 2));
+export type Credentials = ServerCredentials | ClientCredentials;
+
+export function credentialsPath(): string {
+  return CREDS_PATH;
 }
 
-export function loadCredentials(): Credentials {
-  const raw = readFileSync(CREDS_PATH, "utf-8");
-  return JSON.parse(raw);
+export function saveCredentials(
+  creds: Credentials,
+  path: string = CREDS_PATH,
+): void {
+  mkdirSync(dirname(path), { recursive: true });
+  writeFileSync(path, JSON.stringify(creds, null, 2));
+}
+
+export function loadCredentials(
+  path: string = CREDS_PATH,
+): Credentials & { token: string } {
+  const raw = readFileSync(path, "utf-8");
+  const parsed: Credentials = JSON.parse(raw);
+  if (parsed.mode === "server") {
+    return { ...parsed, token: parsed.adminKey };
+  }
+  return parsed;
 }
 
 export async function apiRequest(
