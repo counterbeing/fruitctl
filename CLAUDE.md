@@ -22,7 +22,7 @@ pnpm lint:fix      # biome check --write .
 pnpm --filter @fruitctl/core dev
 ```
 
-**Env vars for dev server:** `FRUITCTL_JWT_SECRET` (required, min 16 chars), `FRUITCTL_PORT` (default 3456), `FRUITCTL_HOST` (default 127.0.0.1), `FRUITCTL_DB_PATH` (default `./fruitctl.db`), `FRUITCTL_ADAPTERS` (comma-separated, default `reminders,calendar`).
+**Env vars for dev server:** `FRUITCTL_SECRET` (optional if `fruitctl init` was run; env var overrides credentials file), `FRUITCTL_PORT` (default 3456), `FRUITCTL_HOST` (default 127.0.0.1), `FRUITCTL_DB_PATH` (default `./fruitctl.db`), `FRUITCTL_ADAPTERS` (comma-separated, default `reminders,calendar`).
 
 ## Architecture
 
@@ -67,10 +67,30 @@ SQLite via Drizzle + better-sqlite3. Auto-migration runs inside `createDatabase(
 ## Conventions
 
 - **Zod imports:** `import { z } from "zod/v4"` (not `"zod"`)
-- **Formatting:** Biome with space (not tabs). Run `pnpm lint:fix` before committing.
+- **Formatting:** Biome with spaces (not tabs). Run `pnpm lint:fix` before committing.
 - **ESM:** All packages are `"type": "module"`. Imports must use `.js` extensions in `.ts` files.
 - **TypeScript:** `strict: true`, target ES2022, Node16 module resolution. All packages extend `tsconfig.base.json`.
 - **Shared types go in `@fruitctl/shared`**, never in `@fruitctl/core`.
 - **Testing:** Vitest. Tests use `createDatabase(":memory:")` for in-memory SQLite. Tests at `src/__tests__/*.test.ts`. Use `fastify.inject()` for HTTP tests.
 - **Error handling:** `AppError` class with `ErrorCode` enum, mapped to HTTP status codes by a global Fastify error handler.
 - **Workspace deps:** Use `workspace:*` in package.json.
+
+## Past Bugs to Avoid
+
+- **`apps/core/tsconfig.json` must NOT exclude `main.ts`** — this broke the build previously and was hard to diagnose.
+
+## Adding a New Plugin
+
+1. Create `packages/plugins/{name}/` with `package.json` (`@fruitctl/{name}`), `tsconfig.json` extending `../../tsconfig.base.json`
+2. Implement `src/{name}ctl.ts` — wrapper class around a native CLI tool, accepts injectable `execFn`
+3. Implement `src/schemas.ts` — Zod schemas for params (import from `"zod/v4"`)
+4. Implement `src/plugin.ts` — `FastifyPluginAsync<AdapterPluginOptions>` with GET routes for reads, POST routes calling `opts.approval.propose()`
+5. Implement `src/commands.ts` — Commander command using `apiRequest()` from `@fruitctl/shared`
+6. Implement `src/index.ts` — export the `AdapterPlugin` (plugin + manifest) and the Commander command
+7. Register in `apps/core/src/main.ts` `adapterMap`
+8. Register in `apps/cli/src/index.ts` with `program.addCommand()`
+9. Add `@fruitctl/{name}: workspace:*` dependency to both `apps/core` and `apps/cli`
+
+## Design Docs
+
+Design documents and implementation plans live in `docs/plans/`. Check there before starting major features — a design doc may already exist.

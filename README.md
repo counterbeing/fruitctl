@@ -13,7 +13,7 @@ Approval-gated access to macOS apps (Reminders, Calendar) over HTTP. An AI agent
 3. A human reviews and approves/rejects via the **web dashboard** at `GET /`
 4. On approval, the server executes the action against the native macOS app
 
-Read operations (listing reminders, viewing calendars) work immediately without approval.
+Read operations (listing reminders, viewing calendars) work immediecriettely without approval.
 
 ## Install the CLI
 
@@ -26,25 +26,29 @@ curl -fsSL https://github.com/counterbeing/fruitctl/releases/latest/download/fru
 
 ## Setup
 
+### Initialize the server
+
+```bash
+fruitctl init
+```
+
+This generates a secret and API keys, saving them to `~/.config/fruitctl/credentials.json`. The admin and agent keys are printed to stdout.
+
 ### Start the server
 
 ```bash
-export FRUITCTL_SECRET="your-secret-min-16-chars"
-# From the repo:
-pnpm --filter @fruitctl/core dev
+fruitctl server start
 ```
 
-### Generate API keys
+The server reads the secret from the credentials file automatically — no env vars needed.
+
+### Configure a client
+
+On a different machine (or for agent-only access), use the agent key from the init output:
 
 ```bash
-# Admin key (full access — approve/reject proposals)
-fruitctl auth token --secret $FRUITCTL_SECRET --role admin
-
-# Agent key (read + propose only)
-fruitctl auth token --secret $FRUITCTL_SECRET --role agent --server http://server-host:3456
+fruitctl init --client <agent-key> --server http://<server-host>:3456
 ```
-
-Keys are saved to `~/.config/fruitctl/credentials.json`.
 
 ### Open the dashboard
 
