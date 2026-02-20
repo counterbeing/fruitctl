@@ -54,19 +54,24 @@ Visit `http://localhost:3456` and paste your admin key.
 
 All endpoints except `GET /` and `GET /health` require a Bearer token.
 
+### Core routes
+
 | Endpoint | Role | Description |
 |---|---|---|
 | `GET /health` | — | Health check |
-| `GET /reminders/lists` | agent | List reminder lists |
-| `POST /reminders/list` | agent | List reminders in a list |
-| `POST /reminders/add` | agent | Propose adding a reminder |
-| `GET /calendar/calendars` | agent | List calendars |
-| `GET /calendar/events?calendar=...&from=...&to=...` | agent | List events |
-| `POST /calendar/add` | agent | Propose adding an event |
 | `GET /proposals` | agent | List proposals |
 | `GET /proposals/:id` | agent | View a proposal |
 | `POST /proposals/:id/approve` | admin | Approve a proposal |
 | `POST /proposals/:id/reject` | admin | Reject a proposal |
+
+### Plugins
+
+Each plugin mounts its own routes under a prefix. See the plugin README for full route documentation.
+
+| Plugin | Prefix | Description |
+|---|---|---|
+| [Reminders](packages/plugins/reminders/README.md) | `/reminders` | macOS Reminders via `remindctl` |
+| [Calendar](packages/plugins/calendar/README.md) | `/calendar` | macOS Calendar via `ekctl` |
 
 ## Architecture
 
