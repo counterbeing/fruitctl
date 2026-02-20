@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/logo.png" alt="fruitctl logo" width="200" />
+</p>
+
 # fruitctl
 
 Approval-gated access to macOS apps (Reminders, Calendar) over HTTP. An AI agent proposes changes; a human approves them via web dashboard or CLI.
