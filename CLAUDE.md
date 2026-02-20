@@ -22,7 +22,7 @@ pnpm lint:fix      # biome check --write .
 pnpm --filter @fruitctl/core dev
 ```
 
-**Env vars for dev server:** `FRUITCTL_SECRET` (optional if `fruitctl init` was run; env var overrides credentials file), `FRUITCTL_PORT` (default 3456), `FRUITCTL_HOST` (default 127.0.0.1), `FRUITCTL_DB_PATH` (default `./fruitctl.db`), `FRUITCTL_ADAPTERS` (comma-separated, default `reminders,calendar`).
+**Env vars for dev server:** `FRUITCTL_SECRET` (optional if `fruitctl init` was run; env var overrides credentials file), `FRUITCTL_PORT` (default 3456), `FRUITCTL_HOST` (default 0.0.0.0), `FRUITCTL_DB_PATH` (default `./fruitctl.db`), `FRUITCTL_ADAPTERS` (comma-separated, default `reminders,calendar`).
 
 ## Architecture
 

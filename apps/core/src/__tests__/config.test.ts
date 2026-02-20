@@ -25,7 +25,7 @@ describe("loadConfig", () => {
       credsPath,
     );
     expect(config.port).toBe(4000);
-    expect(config.host).toBe("127.0.0.1");
+    expect(config.host).toBe("0.0.0.0");
     expect(config.secret).toBe("a-very-long-secret-key");
   });
 

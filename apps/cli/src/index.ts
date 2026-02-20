@@ -11,7 +11,7 @@ const program = new Command();
 program
   .name("fruitctl")
   .description("Local Apple Integration Gateway CLI")
-  .version("0.2.0");
+  .version("0.2.1");
 
 program.addCommand(initCommand);
 program.addCommand(calendarCommand);
