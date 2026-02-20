@@ -1,4 +1,5 @@
 import type { ActionDef, AdapterPlugin } from "@fruitctl/shared";
+export { remindersCommand } from "./commands.js";
 import type { z } from "zod/v4";
 import { remindersPlugin } from "./plugin.js";
 import { Remindctl } from "./remindctl.js";

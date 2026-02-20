@@ -1,4 +1,5 @@
 import type { ActionDef, AdapterPlugin } from "@fruitctl/shared";
+export { calendarCommand } from "./commands.js";
 import type { z } from "zod/v4";
 import { Ekctl } from "./ekctl.js";
 import { calendarPlugin } from "./plugin.js";

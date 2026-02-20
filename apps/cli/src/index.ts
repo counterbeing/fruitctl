@@ -1,9 +1,9 @@
 #!/usr/bin/env node
+import { calendarCommand } from "@fruitctl/calendar";
+import { remindersCommand } from "@fruitctl/reminders";
 import { Command } from "commander";
 import { authCommand } from "./commands/auth.js";
-import { calendarCommand } from "./commands/calendar.js";
 import { proposalsCommand } from "./commands/proposals.js";
-import { remindersCommand } from "./commands/reminders.js";
 import { serverCommand } from "./commands/server.js";
 
 const program = new Command();

@@ -1,5 +1,5 @@
+import { apiRequest } from "@fruitctl/shared";
 import { Command } from "commander";
-import { apiRequest } from "../http.js";
 
 export const remindersCommand = new Command("reminders");
 

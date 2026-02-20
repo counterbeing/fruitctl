@@ -1,5 +1,5 @@
 import { Command } from "commander";
-import { apiRequest } from "../http.js";
+import { apiRequest } from "@fruitctl/shared";
 
 export const proposalsCommand = new Command("proposals");
 

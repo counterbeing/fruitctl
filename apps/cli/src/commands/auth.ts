@@ -1,6 +1,6 @@
 import { createHmac } from "node:crypto";
 import { Command } from "commander";
-import { saveCredentials } from "../http.js";
+import { saveCredentials } from "@fruitctl/shared";
 
 export const authCommand = new Command("auth");
 
