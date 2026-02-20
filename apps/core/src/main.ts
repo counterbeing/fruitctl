@@ -7,6 +7,7 @@ import { loadConfig } from "./config.js";
 import { registerProposalRoutes } from "./proposals-routes.js";
 import { registerAdapters } from "./registry.js";
 import { createServer } from "./server.js";
+import { registerUiRoutes } from "./ui-routes.js";
 
 const adapterMap: Record<string, AdapterPlugin> = {
 	calendar: calendarAdapter,
@@ -24,6 +25,7 @@ async function main() {
 
 	const engine = new ApprovalEngine(db);
 	registerProposalRoutes(server, engine);
+	registerUiRoutes(server);
 
 	const enabledAdapters = config.adapters
 		.map((name) => adapterMap[name])
