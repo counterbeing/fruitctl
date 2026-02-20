@@ -45,6 +45,9 @@ importers:
       '@fastify/jwt':
         specifier: ^10
         version: 10.0.0
+      '@fruitctl/calendar':
+        specifier: workspace:*
+        version: link:../../packages/plugins/calendar
       '@fruitctl/db':
         specifier: workspace:*
         version: link:../../packages/db

@@ -1,3 +1,4 @@
+import { calendarAdapter } from "@fruitctl/calendar";
 import { createDatabase } from "@fruitctl/db";
 import { remindersAdapter } from "@fruitctl/reminders";
 import type { AdapterPlugin } from "@fruitctl/shared";
@@ -8,6 +9,7 @@ import { registerAdapters } from "./registry.js";
 import { createServer } from "./server.js";
 
 const adapterMap: Record<string, AdapterPlugin> = {
+	calendar: calendarAdapter,
 	reminders: remindersAdapter,
 };
 

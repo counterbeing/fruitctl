@@ -5,7 +5,7 @@ export const serverConfigSchema = z.object({
 	host: z.string().default("127.0.0.1"),
 	jwtSecret: z.string().min(16),
 	dbPath: z.string().default("./fruitctl.db"),
-	adapters: z.array(z.string()).default(["reminders"]),
+	adapters: z.array(z.string()).default(["reminders", "calendar"]),
 });
 
 export type ServerConfig = z.infer<typeof serverConfigSchema>;
