@@ -5,6 +5,7 @@ import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import type { FastifyPluginAsync } from "fastify";
 import { describe, expect, it, vi } from "vitest";
 import { ApprovalEngine } from "../approval.js";
+import { deriveKey } from "../auth.js";
 import { registerProposalRoutes } from "../proposals-routes.js";
 import { registerAdapters } from "../registry.js";
 import { createServer } from "../server.js";
@@ -86,10 +87,16 @@ function createTestAdapterWithActions(
   });
 }
 
+const TEST_SECRET = "test-secret-long-enough";
+const agentToken = deriveKey("agent", TEST_SECRET);
+const adminToken = deriveKey("admin", TEST_SECRET);
+const authHeaders = { authorization: `Bearer ${agentToken}` };
+const adminHeaders = { authorization: `Bearer ${adminToken}` };
+
 describe("integration: server + adapter", () => {
   it("boots server, registers adapter, serves requests", async () => {
     const db = createDatabase(":memory:");
-    const server = createServer({ db, jwtSecret: "test-secret-long-enough" });
+    const server = createServer({ db, secret: TEST_SECRET });
     const adapter = createTestRemindersAdapter();
 
     await registerAdapters(server, [adapter], {
@@ -106,6 +113,7 @@ describe("integration: server + adapter", () => {
     const lists = await server.inject({
       method: "GET",
       url: "/reminders/lists",
+      headers: authHeaders,
     });
     expect(lists.statusCode).toBe(200);
     expect(lists.json().items).toHaveLength(1);
@@ -115,7 +123,7 @@ describe("integration: server + adapter", () => {
   it("wires action registry so approved proposals execute actions", async () => {
     const db = createDatabase(":memory:");
     migrate(db, { migrationsFolder });
-    const server = createServer({ db, jwtSecret: "test-secret-long-enough" });
+    const server = createServer({ db, secret: TEST_SECRET });
 
     const executeFn = vi.fn().mockResolvedValue({ ok: true });
     const adapter = createTestAdapterWithActions(executeFn);
@@ -133,6 +141,7 @@ describe("integration: server + adapter", () => {
     const writeRes = await server.inject({
       method: "POST",
       url: "/test-adapter/write",
+      headers: authHeaders,
       payload: { action: "write_item", params: { title: "Buy milk" } },
     });
     expect(writeRes.statusCode).toBe(200);
@@ -144,6 +153,7 @@ describe("integration: server + adapter", () => {
     const approveRes = await server.inject({
       method: "POST",
       url: `/proposals/${proposal.id}/approve`,
+      headers: adminHeaders,
     });
     expect(approveRes.statusCode).toBe(200);
     expect(approveRes.json().status).toBe("approved");

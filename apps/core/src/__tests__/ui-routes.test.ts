@@ -5,7 +5,7 @@ import { registerUiRoutes } from "../ui-routes.js";
 
 function buildApp() {
   const db = createDatabase(":memory:");
-  const server = createServer({ db, jwtSecret: "test-secret-long-enough" });
+  const server = createServer({ db, secret: "test-secret-long-enough" });
   registerUiRoutes(server);
   return { server };
 }

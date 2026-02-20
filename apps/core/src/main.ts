@@ -19,7 +19,7 @@ async function main() {
   const db = createDatabase(config.dbPath);
   const server = createServer({
     db,
-    jwtSecret: config.jwtSecret,
+    secret: config.secret,
     logger: true,
   });
 
