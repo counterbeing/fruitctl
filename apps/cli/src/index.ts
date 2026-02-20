@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { Command } from "commander";
 import { authCommand } from "./commands/auth.js";
+import { calendarCommand } from "./commands/calendar.js";
 import { proposalsCommand } from "./commands/proposals.js";
 import { remindersCommand } from "./commands/reminders.js";
 import { serverCommand } from "./commands/server.js";
@@ -13,6 +14,7 @@ program
 	.version("0.1.0");
 
 program.addCommand(authCommand);
+program.addCommand(calendarCommand);
 program.addCommand(serverCommand);
 program.addCommand(remindersCommand);
 program.addCommand(proposalsCommand);
