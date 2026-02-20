@@ -1,6 +1,7 @@
 {
   "name": "fruitctl",
   "private": true,
+  "packageManager": "pnpm@10.15.0",
   "scripts": {
     "build": "nx run-many -t build",
     "test": "nx run-many -t test",
