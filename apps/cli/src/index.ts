@@ -9,9 +9,9 @@ import { serverCommand } from "./commands/server.js";
 const program = new Command();
 
 program
-	.name("fruitctl")
-	.description("Local Apple Integration Gateway CLI")
-	.version("0.1.0");
+  .name("fruitctl")
+  .description("Local Apple Integration Gateway CLI")
+  .version("0.1.0");
 
 program.addCommand(authCommand);
 program.addCommand(calendarCommand);

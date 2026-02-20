@@ -1,7 +1,8 @@
-import fastifyJwt from "@fastify/jwt";
 import type { AppDatabase } from "@fruitctl/db";
-import Fastify, { type FastifyReply, type FastifyRequest } from "fastify";
 import { AppError, ErrorCode } from "@fruitctl/shared";
+import Fastify, { type FastifyReply, type FastifyRequest } from "fastify";
+import type { Role } from "./auth.js";
+import { deriveKey } from "./auth.js";
 
 declare module "fastify" {
 	interface FastifyInstance {
@@ -10,11 +11,14 @@ declare module "fastify" {
 			reply: FastifyReply,
 		) => Promise<void>;
 	}
+	interface FastifyRequest {
+		role: Role;
+	}
 }
 
 export interface ServerOptions {
 	db: AppDatabase;
-	jwtSecret: string;
+	secret: string;
 	host?: string;
 	port?: number;
 	logger?: boolean;
@@ -25,15 +29,25 @@ export function createServer(options: ServerOptions) {
 		logger: options.logger ?? false,
 	});
 
-	server.register(fastifyJwt, { secret: options.jwtSecret });
+	const adminKey = deriveKey("admin", options.secret);
+	const agentKey = deriveKey("agent", options.secret);
+
+	server.decorateRequest("role", "");
 
 	server.decorate(
 		"authenticate",
 		async (request: FastifyRequest, _reply: FastifyReply) => {
-			try {
-				await request.jwtVerify();
-			} catch {
-				throw new AppError(ErrorCode.UNAUTHORIZED, "Invalid or missing token");
+			const header = request.headers.authorization;
+			if (!header?.startsWith("Bearer ")) {
+				throw new AppError(ErrorCode.UNAUTHORIZED, "Missing authorization token");
+			}
+			const token = header.slice(7);
+			if (token === adminKey) {
+				request.role = "admin";
+			} else if (token === agentKey) {
+				request.role = "agent";
+			} else {
+				throw new AppError(ErrorCode.UNAUTHORIZED, "Invalid authorization token");
 			}
 		},
 	);

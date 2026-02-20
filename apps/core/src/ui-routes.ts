@@ -1,13 +1,13 @@
 import type { FastifyInstance } from "fastify";
 
 export function registerUiRoutes(server: FastifyInstance) {
-	server.get("/", async (_request, reply) => {
-		reply.type("text/html").send(dashboardHtml());
-	});
+  server.get("/", async (_request, reply) => {
+    reply.type("text/html").send(dashboardHtml());
+  });
 }
 
 function dashboardHtml(): string {
-	return `<!DOCTYPE html>
+  return `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
