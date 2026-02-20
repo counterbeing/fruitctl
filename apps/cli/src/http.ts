@@ -26,12 +26,15 @@ export async function apiRequest(
 	body?: unknown,
 ): Promise<unknown> {
 	const { token, serverUrl } = loadCredentials();
+	const headers: Record<string, string> = {
+		Authorization: `Bearer ${token}`,
+	};
+	if (body) {
+		headers["Content-Type"] = "application/json";
+	}
 	const res = await fetch(`${serverUrl}${path}`, {
 		method,
-		headers: {
-			"Content-Type": "application/json",
-			Authorization: `Bearer ${token}`,
-		},
+		headers,
 		body: body ? JSON.stringify(body) : undefined,
 	});
 	const data = await res.json();
