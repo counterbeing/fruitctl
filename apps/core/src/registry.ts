@@ -42,12 +42,17 @@ export async function registerAdapters(
       continue;
     }
 
-    await server.register(adapter, {
-      prefix: `/${manifest.name}`,
-      db: options.db,
-      config: options.config,
-      approval: options.approval,
-    });
+    await server.register(
+      async (scoped) => {
+        scoped.addHook("onRequest", server.authenticate);
+        await scoped.register(adapter, {
+          db: options.db,
+          config: options.config,
+          approval: options.approval,
+        });
+      },
+      { prefix: `/${manifest.name}` },
+    );
 
     registered.push(manifest.name);
     capabilities.push(...manifest.capabilities);
