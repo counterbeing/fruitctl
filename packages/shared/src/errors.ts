@@ -7,6 +7,7 @@ export enum ErrorCode {
   EXECUTION_FAILED = "EXECUTION_FAILED",
   APPROVAL_REQUIRED = "APPROVAL_REQUIRED",
   UNAUTHORIZED = "UNAUTHORIZED",
+  FORBIDDEN = "FORBIDDEN",
 }
 
 const STATUS_MAP: Record<ErrorCode, number> = {
@@ -18,6 +19,7 @@ const STATUS_MAP: Record<ErrorCode, number> = {
   [ErrorCode.EXECUTION_FAILED]: 500,
   [ErrorCode.APPROVAL_REQUIRED]: 202,
   [ErrorCode.UNAUTHORIZED]: 401,
+  [ErrorCode.FORBIDDEN]: 403,
 };
 
 interface AppErrorOptions {
