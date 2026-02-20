@@ -6,21 +6,22 @@
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
 	"bin": {
-		"fruitctl": "dist/index.js"
+		"fruitctl": "dist/fruitctl.cjs"
 	},
 	"scripts": {
 		"build": "tsc",
+		"bundle": "node scripts/bundle.mjs",
 		"test": "vitest run"
 	},
 	"dependencies": {
 		"@fruitctl/calendar": "workspace:*",
-		"@fruitctl/db": "workspace:*",
 		"@fruitctl/reminders": "workspace:*",
 		"@fruitctl/shared": "workspace:*",
 		"commander": "^14"
 	},
 	"devDependencies": {
 		"@types/node": "^25.3.0",
+		"esbuild": "^0.27.3",
 		"tsx": "^4.21",
 		"typescript": "^5.9",
 		"vitest": "^4"
